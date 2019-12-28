@@ -1,4 +1,4 @@
 {
-    "mognodb_uri": "mongodb+srv://root:root@cluster0-1w9vq.mongodb.net/test?retryWrites=true&w=majority",
+    "mognodb_uri": "mongodb://localhost:27017/mern-training",
     "secret": "someSecet"
 }

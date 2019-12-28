@@ -1,7 +1,6 @@
 {
-  "name": "mern-training",
+  "name": "clear",
   "version": "1.0.0",
-  "description": "",
   "main": "app.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -18,5 +17,14 @@
     "gravatar": "^1.8.0",
     "jsonwebtoken": "^8.5.1",
     "mongoose": "^5.8.2"
-  }
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/nmaqsood91/mern-training.git"
+  },
+  "bugs": {
+    "url": "https://github.com/nmaqsood91/mern-training/issues"
+  },
+  "homepage": "https://github.com/nmaqsood91/mern-training#readme",
+  "description": ""
 }
