@@ -1,7 +1,7 @@
 const express = require("express")
 const router = express.Router()
 const User = require("../../models/User")
-const verifyToken = require("../../middleare/verifyToken")
+const verifyToken = require("../../middleware/verifyToken")
 router.get("/", verifyToken, async function (req, res) {
     try {
         const result = await User.findOne({_id: req.user._id})

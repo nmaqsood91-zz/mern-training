@@ -1,4 +1,4 @@
 {
-    "mognodb_uri": "mongodb+srv://root:root@cluster0-1w9vq.mongodb.net/test?retryWrites=true&w=majority",
+    "mongodb_uri": "mongodb+srv://root:root@cluster0-64tf0.mongodb.net/test?retryWrites=true&w=majority",
     "secret": "someSecet"
 }
