@@ -69,7 +69,7 @@ router.post("/like/:postId", mw, async (req, res) => {
             })
         if (post.likes.length > 0) {
             const result = post.likes.filter(like => {
-                if(like.user.toString() === req.user._id) 
+                if(like.user.toString() === req.user._id.toString()) 
                     return like
             });
             if (result.length > 0)
@@ -89,4 +89,113 @@ router.post("/like/:postId", mw, async (req, res) => {
     }
 })
 
+router.delete("/like/:postId", mw, async (req, res) => {
+    try {
+        const post = await Post.findOne({_id: req.params.postId})
+        if(!post)
+            return res.status(404).json({
+                message: "Post not found"
+            })
+        /** Does post has likes */
+        if(post.likes.length > 0){
+            const result = post.likes.filter(async like => {
+                /** check User's like */
+                if(like.user.toString() === req.user._id.toString()){
+                    let likeArray = post.likes;
+                    console.log("Array before",likeArray)
+                    /** Remove User's like only */
+                    likeArray.splice(post.likes.indexOf(like.user.toString()), 1 );
+                    console.log("Arrat after",likeArray)
+                    post.likes = likeArray;
+                    /** Update post */
+                    await Post.updateOne({_id: req.params.postId}, {$set: {"likes": likeArray}})
+                    return res.status(200).json({
+                        message: "Unlike successfully"
+                    })
+                }else{
+                    /** Post has likes but user didn't like */
+                    return res.status(404).json({
+                        message: "You didn't like"
+                    })
+                }
+            })
+        } else {
+            return res.status(400).json({
+                message: "didn't found any like"
+            })
+        }
+    } catch (err) {
+        return res.status(400).json(err.message)
+    }
+})
+
+router.post("/comment/:postId", mw, [
+    check('text').not().isEmpty(),
+] , async (req, res) => {
+    try {
+        const errors = validationResult(req);
+        if (!errors.isEmpty()) {
+          return res.status(422).json({ errors: errors.array() });
+        }
+        const post = await Post.findOne({_id: req.params.postId})
+        if(!post)
+            return res.status(404).json({
+                message: "Post not found"
+            })
+        let postComment = {
+            user: req.user._id,
+            text: req.body.text
+        }
+        post.comments.push(postComment)
+        await Post.updateOne({_id: req.params.postId}, {$set: {"comments": post.comments}})
+        return res.status(200).json({
+            message: "Commented successfully!"
+        })
+    } catch (err) {
+        return res.status(500).json({
+            message: err.message
+        })
+    }
+})
+
+router.delete("/comment/:postId/:commentId", mw, async (req, res) => {
+    try {
+        const post = await Post.findOne({_id: req.params.postId})
+        if(!post)
+            return res.status(404).json({
+                message: "Post not found"
+            })
+        /** Does post has comment */
+        if(post.comments.length > 0){
+            console.log("post data: ", post.comments)
+            console.log(req.params.commentId)
+            const result = post.comments.filter(async comment => {
+                /** check User's commented */
+                if(comment._id.toString() === req.params.commentId.toString()){
+                    let commentsArray = post.comments;
+                    /** Remove User's like only */
+                    commentsArray.splice(post.comments.indexOf(req.params.commentId.toString()), 1 );
+                    console.log("Arrat after",commentsArray)
+                    post.comments = commentsArray;
+                    /** Update post */
+                    await Post.updateOne({_id: req.params.postId}, { $set: {"comments": commentsArray}})
+                    return res.status(201).json({
+                        message: "Comment Deleted!"
+                    })
+                }else{
+                    /** Post has likes but user didn't like */
+                    return res.status(404).json({
+                        message: "You didn't comment"
+                    })
+                }
+            })
+        } else {
+            return res.status(400).json({
+                message: "No comment found "
+            })
+        }
+    } catch(err) {
+
+    }
+})
 module.exports = router
