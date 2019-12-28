@@ -13,7 +13,6 @@ module.exports = async function (req, res, next) {
         const user = await User.findOne({email: decodedUser.email}).lean()
         if(!user)
             return res.status(401).json({message:"User not found"})
-        console.log('Here is my user object ', user)
         req.user = user
         next()
     } catch (err) {

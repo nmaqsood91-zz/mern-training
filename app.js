@@ -18,6 +18,7 @@ const auth = require("./routes/api/auth")
 app.use("/api/v1/users", user)
 app.use("/api/v1/auth", auth)
 app.use("/api/v1/profile", profile)
+app.use("/api/v1/posts", require("./routes/api/post"))
 app.listen(3000, () => {
     console.log(' Server is up and running ')
 })
