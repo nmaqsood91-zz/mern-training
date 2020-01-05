@@ -1,6 +1,7 @@
 const express = require("express")
 const app = express()
 const cors = require('cors')
+const port = 5000
 const {connect} = require("./models/index")
 connect()
 /**
@@ -20,6 +21,6 @@ app.use("/api/v1/users", user)
 app.use("/api/v1/auth", auth)
 app.use("/api/v1/profile", profile)
 app.use("/api/v1/posts", require("./routes/api/post"))
-app.listen(process.env.PORT || 5000, () => {
+app.listen(process.env.PORT || port, () => {
     console.log(' Server is up and running ')
 })
